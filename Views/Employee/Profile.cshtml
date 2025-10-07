@@ -201,15 +201,16 @@
                 <h6 class="mb-0"><i class="fas fa-bolt mr-2"></i>Quick Actions</h6>
             </div>
             <div class="card-body">
-                <a asp-action="Attendance" class="btn btn-outline-primary btn-block mb-2">
+                <a asp-controller="Attendance" asp-action="Attendance" class="btn btn-outline-primary btn-block mb-2">
                     <i class="fas fa-clock mr-2"></i>Mark Attendance
                 </a>
-                <a asp-action="LeaveApply" class="btn btn-outline-info btn-block mb-2">
+                <a asp-controller="Leave" asp-action="LeaveApply" class="btn btn-outline-info btn-block mb-2">
                     <i class="fas fa-calendar-plus mr-2"></i>Apply for Leave
                 </a>
-                <a asp-action="AttendanceHistory" class="btn btn-outline-success btn-block mb-2">
-                    <i class="fas fa-chart-bar mr-2"></i>View History
+                <a asp-controller="Attendance" asp-action="AttendanceHistory" class="btn btn-outline-success btn-block mb-2">
+                    <i class="fas fa-chart-bar mr-2"></i> View History
                 </a>
+
                 <button class="btn btn-outline-warning btn-block" onclick="changePassword()">
                     <i class="fas fa-key mr-2"></i>Change Password
                 </button>
@@ -350,5 +351,5 @@
     function changePassword() {
         // TODO: Implement password change functionality
         alert('Password change functionality will be implemented.');
-    }
+    } 
 </script>

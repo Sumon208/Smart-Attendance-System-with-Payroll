@@ -70,45 +70,63 @@ namespace Smart_Attendance_System.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            var empIdClaim = User.Claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
+
             var model = new EmployeeTaskViewModel
             {
                 ShiftList = await GetSelectList("Shift"),
                 ProjectList = await GetSelectList("Project"),
-                StatusList = await GetSelectList("Status")
+                StatusList = await GetSelectList("Status"),
+                EmployeeId = string.IsNullOrEmpty(empIdClaim) ? 0 : Convert.ToInt32(empIdClaim)
             };
 
-            ViewBag.LoggedInEmployeeId = User.Claims.FirstOrDefault(c => c.Type == "EmployeeId")?.Value;
             ViewBag.LoggedInEmployeeName = User.Identity?.Name;
-
             return View(model);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Create(EmployeeTaskViewModel model)
         {
             try
             {
+                // ✅ Claim থেকে EmployeeId পড়ছি (NameIdentifier ব্যবহার করে)
+                var nameIdentifier = User.Claims.FirstOrDefault(c =>
+                    c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                if (!string.IsNullOrEmpty(nameIdentifier))
+                {
+                    model.EmployeeId = int.Parse(nameIdentifier);
+                }
+
+                // ✅ final চেক
+                if (model.EmployeeId == 0)
+                {
+                    throw new Exception("EmployeeId পাওয়া যায়নি। অনুগ্রহ করে আবার লগইন করুন।");
+                }
 
                 // Save data
                 await _taskRepository.AddTaskAsync(model);
 
                 TempData["SuccessMessage"] = "Employee Task created successfully!";
                 return RedirectToAction(nameof(Index));
-
             }
             catch (Exception ex)
             {
-                // Log the error (you can use ILogger or Serilog etc.)
                 TempData["ErrorMessage"] = $"An error occurred while creating the task: {ex.Message}";
             }
 
-            // If validation fails or an exception occurs → repopulate dropdowns before returning view
+            // repopulate dropdowns
             model.ShiftList = await GetSelectList("Shift");
             model.ProjectList = await GetSelectList("Project");
             model.StatusList = await GetSelectList("Status");
 
             return View(model);
         }
+
+
+
 
 
 

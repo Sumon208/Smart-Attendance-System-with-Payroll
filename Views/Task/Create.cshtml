@@ -30,14 +30,8 @@
                 <input asp-for="EmployeeId" type="hidden" value="@ViewBag.LoggedInEmployeeId" />
 
                 <!-- Employee -->
-                <div class="col-md-6 position-relative">
-                    <label class="form-label fw-semibold">Employee</label>
-                    <div class="input-group shadow-sm">
-                        <span class="input-group-text bg-primary text-white"><i class="fas fa-user"></i></span>
-                        <input type="text" class="form-control bg-light" value="@ViewBag.LoggedInEmployeeName" readonly />
-                    </div>
-                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                </div>
+                <input asp-for="EmployeeId" type="hidden" value="@ViewBag.LoggedInEmployeeId" />
+
 
                 <!-- Project -->
                 <div class="col-md-6 position-relative">
